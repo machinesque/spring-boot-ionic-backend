@@ -20,7 +20,6 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
 	
-	
 	@GetMapping(value = "/{id}")
 //	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable Long id) {
