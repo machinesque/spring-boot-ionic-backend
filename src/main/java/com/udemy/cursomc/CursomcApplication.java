@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.udemy.cursomc.domain.Categoria;
 import com.udemy.cursomc.domain.Cidade;
+import com.udemy.cursomc.domain.Cliente;
+import com.udemy.cursomc.domain.Endereco;
 import com.udemy.cursomc.domain.Estado;
 import com.udemy.cursomc.domain.Produto;
+import com.udemy.cursomc.domain.enums.EnumTipoCliente;
 import com.udemy.cursomc.repositories.CategoriaRepository;
 import com.udemy.cursomc.repositories.CidadeRepository;
+import com.udemy.cursomc.repositories.ClienteRepository;
+import com.udemy.cursomc.repositories.EnderecoRepository;
 import com.udemy.cursomc.repositories.EstadoRepository;
 import com.udemy.cursomc.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -92,6 +103,38 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		estadoRepository.saveAll(Arrays.asList(estado1, estado2));
 		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
+		
+		Cliente cliente1 = new Cliente();
+		
+		cliente1.setNome("Maria Silva");
+		cliente1.setEmail("maria@gmail.com");
+		cliente1.setCpfOuCnpj("36378912377");
+		cliente1.setTipoCliente(EnumTipoCliente.PESSOAFISICA);
+		cliente1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+		
+		Endereco endereco1 = new Endereco();
+		Endereco endereco2 = new Endereco();
+		
+		endereco1.setLogradouro("Rua Flores");
+		endereco1.setNumero("300");
+		endereco1.setComplemento("Apto 303");
+		endereco1.setBairro("Jardim");
+		endereco1.setCep("38220834");
+		endereco1.setCliente(cliente1);
+		endereco1.setCidade(cidade1);
+		
+		endereco2.setLogradouro("Avenida Matos");
+		endereco2.setNumero("105");
+		endereco2.setComplemento("Sala 800");
+		endereco2.setBairro("Centro");
+		endereco2.setCep("38777012");
+		endereco2.setCliente(cliente1);
+		endereco2.setCidade(cidade2);
+		
+		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		
+		clienteRepository.saveAll(Arrays.asList(cliente1));
+		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
 		
 	}
 
