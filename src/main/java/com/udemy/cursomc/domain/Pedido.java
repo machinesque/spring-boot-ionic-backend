@@ -1,47 +1,40 @@
 package com.udemy.cursomc.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
-public class Produto implements Serializable {
-	
+public class Pedido implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String nome;
+	private Date Instante;
 	
-	private Double preco;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
+	private Pagamento pagamento;
 	
-	@JsonBackReference
-	@ManyToMany
-	@JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-	private List<Categoria> categorias = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+	
+	@ManyToOne
+	@JoinColumn(name = "endereco_entrega_id")
+	private Endereco enderecoEntrega;
 
 	private Set<ItemPedido> itens = new HashSet<>();
 	
-	public Produto() {
-		super();
+	public Pedido() {
+
 	}
 
-	public List<Pedido> getPedidos() {
-		List<Pedido> lista =  new ArrayList();
-		for (ItemPedido itemPedido : itens) {
-			lista.add(itemPedido.getPedido());
-		}
-		return lista;
-	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -50,28 +43,36 @@ public class Produto implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public Date getInstante() {
+		return Instante;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setInstante(Date instante) {
+		Instante = instante;
 	}
 
-	public Double getPreco() {
-		return preco;
+	public Pagamento getPagamento() {
+		return pagamento;
 	}
 
-	public void setPreco(Double preco) {
-		this.preco = preco;
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
 	}
 
-	public List<Categoria> getCategorias() {
-		return categorias;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setCategorias(List<Categoria> categorias) {
-		this.categorias = categorias;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Endereco getEnderecoEntrega() {
+		return enderecoEntrega;
+	}
+
+	public void setEnderecoEntrega(Endereco enderecoEntrega) {
+		this.enderecoEntrega = enderecoEntrega;
 	}
 
 	public Set<ItemPedido> getItens() {
@@ -98,7 +99,7 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		Pedido other = (Pedido) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

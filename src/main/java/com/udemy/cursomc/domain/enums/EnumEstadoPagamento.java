@@ -2,15 +2,16 @@ package com.udemy.cursomc.domain.enums;
 
 import java.util.Iterator;
 
-public enum EnumTipoCliente {
+public enum EnumEstadoPagamento {
 
-	PESSOAFISICA(1, "Pessoa Física"), 
-	PESSOAJURIDICA(2, "Pessoa Juridica");
+	PENDENTE(1, "Pendente"), 
+	QUITADO(2, "Quitado"),
+	CANCELADO(3, "Cancelado");
 
 	private int codigo;
 	private String descricao;
 
-	private EnumTipoCliente(int codigo, String descricao) {
+	private EnumEstadoPagamento(int codigo, String descricao) {
 		this.codigo = codigo;
 		this.descricao = descricao;
 	}
@@ -23,13 +24,13 @@ public enum EnumTipoCliente {
 		return descricao;
 	}
 
-	public static EnumTipoCliente toEnum(Integer codigo) {
+	public static EnumEstadoPagamento toEnum(Integer codigo) {
 
 		if (codigo != null) {
-			for (EnumTipoCliente tipoCliente : EnumTipoCliente.values()) {
+			for (EnumEstadoPagamento estadoPagamento : EnumEstadoPagamento.values()) {
 
-				if (codigo.equals(tipoCliente.getCodigo())) {
-					return tipoCliente;
+				if (codigo.equals(estadoPagamento.getCodigo())) {
+					return estadoPagamento;
 				}
 
 			}

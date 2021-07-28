@@ -1,5 +1,6 @@
 package com.udemy.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.udemy.cursomc.domain.Cidade;
 import com.udemy.cursomc.domain.Cliente;
 import com.udemy.cursomc.domain.Endereco;
 import com.udemy.cursomc.domain.Estado;
+import com.udemy.cursomc.domain.Pagamento;
+import com.udemy.cursomc.domain.PagamentoComBoleto;
+import com.udemy.cursomc.domain.PagamentoComCartao;
+import com.udemy.cursomc.domain.Pedido;
 import com.udemy.cursomc.domain.Produto;
+import com.udemy.cursomc.domain.enums.EnumEstadoPagamento;
 import com.udemy.cursomc.domain.enums.EnumTipoCliente;
 import com.udemy.cursomc.repositories.CategoriaRepository;
 import com.udemy.cursomc.repositories.CidadeRepository;
 import com.udemy.cursomc.repositories.ClienteRepository;
 import com.udemy.cursomc.repositories.EnderecoRepository;
 import com.udemy.cursomc.repositories.EstadoRepository;
+import com.udemy.cursomc.repositories.PagamentoRepository;
+import com.udemy.cursomc.repositories.PedidoRepository;
 import com.udemy.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -41,6 +49,12 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -135,6 +149,45 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		clienteRepository.saveAll(Arrays.asList(cliente1));
 		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		
+		Pedido pedido1 = new Pedido();
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		pedido1.setInstante(simpleDateFormat.parse("30/09/2017 10:32"));
+		pedido1.setCliente(cliente1);
+		pedido1.setEnderecoEntrega(endereco1);
+		
+		Pedido pedido2 = new Pedido();
+		
+		pedido2.setInstante(simpleDateFormat.parse("10/10/2017 19:35"));
+		pedido2.setCliente(cliente1);
+		pedido2.setEnderecoEntrega(endereco2);
+		
+		PagamentoComCartao pagamentoComCartao1 = new PagamentoComCartao();
+		
+		pagamentoComCartao1.setEstadoPagamento(EnumEstadoPagamento.QUITADO);
+		pagamentoComCartao1.setPedido(pedido1);
+		pagamentoComCartao1.setNumeroParcelas(6);
+		
+		Pagamento pagamento1 = new PagamentoComCartao();
+		pagamento1 = pagamentoComCartao1;
+		pedido1.setPagamento(pagamento1);
+		
+		PagamentoComBoleto pagamentoComBoleto1 = new PagamentoComBoleto();
+		
+		pagamentoComBoleto1.setEstadoPagamento(EnumEstadoPagamento.PENDENTE);
+		pagamentoComBoleto1.setPedido(pedido2);
+		pagamentoComBoleto1.setDataVencimento(simpleDateFormat.parse("20/10/2017 00:00"));
+
+		Pagamento pagamento2 = new PagamentoComBoleto();
+		pagamento2 = pagamentoComBoleto1;
+		pedido2.setPagamento(pagamento2);
+		
+		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+		
+		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+		pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
 		
 	}
 
