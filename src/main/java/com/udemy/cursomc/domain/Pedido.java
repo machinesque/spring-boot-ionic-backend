@@ -7,6 +7,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Pedido implements Serializable {
 
@@ -16,6 +19,7 @@ public class Pedido implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date Instante;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
@@ -29,6 +33,7 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "endereco_entrega_id")
 	private Endereco enderecoEntrega;
 
+	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {

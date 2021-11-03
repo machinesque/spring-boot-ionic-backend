@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udemy.cursomc.domain.enums.EnumEstadoPagamento;
 
 @Entity
@@ -17,6 +19,7 @@ public abstract class Pagamento implements Serializable {
 	
 	private Integer estadoPagamento;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name="pedido_id")
 	@MapsId   //Com essa anotação garantimos que o ID do pagamento será o mesmo para o Pedido
